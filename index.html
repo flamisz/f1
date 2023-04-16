@@ -11,9 +11,12 @@
 <body>
     <div
         x-data="{ races: [] }"
-        x-init="races = await (await fetch('/src/json/2023.json')).json()"
+        x-init="
+            racesJson = await (await fetch('/src/json/2023.json')).json()
+            races = racesJson.MRData.RaceTable.Races
+        "
     >
-        <template x-for="race in races.MRData.RaceTable.Races">
+        <template x-for="race in races">
             <li x-text="race.raceName"></li>
         </template>
     </div>
