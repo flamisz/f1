@@ -10,15 +10,19 @@
 
 <body>
     <div
-        x-data="{ races: [] }"
+        x-data="{ races: [], race: null }"
         x-init="
             racesJson = await (await fetch('/src/json/2023.json')).json()
             races = racesJson.MRData.RaceTable.Races
         "
     >
-        <template x-for="race in races">
-            <li x-text="race.raceName"></li>
+        <template x-if="race">
+            <div>name: <span x-text="race.raceName"></span></div>
         </template>
+        <template x-for="r in races">
+            <li class="cursor-pointer" x-text="r.raceName" @click="race = r"></li>
+        </template>
+
     </div>
 </body>
 
