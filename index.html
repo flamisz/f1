@@ -17,33 +17,27 @@
             races = racesJson.MRData.RaceTable.Races
         "
     >
-        <template x-if="race">
-            <div>
-                <div>name: <span x-text="race.raceName"></span></div>
-                <div>race time: <span x-text="new Date(`${race.date}T${race.time}`).toLocaleString()"></span></div>
-                <template x-if="race.Sprint">
-                    <div>sprint time: <span x-text="new Date(`${race.Sprint.date}T${race.Sprint.time}`).toLocaleString()"></span></div>
-                </template>
-                <div>qualification time: <span x-text="new Date(`${race.Qualifying.date}T${race.Qualifying.time}`).toLocaleString()"></span></div>
-            </div>
-        </template>
-
-        <nav class="space-y-1" aria-label="Sidebar">
-            <!-- Current: "bg-gray-100 text-gray-900", Default: "text-gray-600 hover:bg-gray-50 hover:text-gray-900" -->
-            <a href="#" class="bg-gray-100 text-gray-900 flex items-center rounded-md px-3 py-2 text-sm font-medium" aria-current="page">
-              <span class="truncate">Dashboard</span>
-            </a>
-
-            <a href="#" class="text-gray-600 hover:bg-gray-50 hover:text-gray-900 flex items-center rounded-md px-3 py-2 text-sm font-medium">
-              <span class="truncate">Team</span>
-            </a>
-          </nav>
-
         <template x-for="r in races">
-            <div class="space-y-1">
-                <div class="cursor-pointer text-gray-600 hover:bg-gray-50 hover:text-gray-900 flex items-center rounded-md px-3 py-2 text-sm font-medium">
-                    <span x-text="r.raceName" @click="race = r" class="truncate"></span>
+            <div>
+                <div class="space-y-1">
+                    <div
+                        class="cursor-pointer flex items-center rounded-md px-3 py-2 text-sm font-medium"
+                        :class="(race && r.raceName == race.raceName) ? 'bg-gray-100 text-gray-900' : 'text-gray-600 hover:bg-gray-50 hover:text-gray-900'"
+                        @click="race = r"
+                    >
+                        <span x-text="r.raceName" class="truncate"></span>
+                    </div>
                 </div>
+
+                <template x-if="race && race.raceName == r.raceName">
+                    <div class="px-3 py-2 space-y-1 border rounded-md mt-2 text-sm text-gray-900">
+                        <div>race: <span x-text="new Date(`${race.date}T${race.time}`).toLocaleString()"></span></div>
+                        <template x-if="race.Sprint">
+                            <div>sprint: <span x-text="race.Sprint ? new Date(`${race.Sprint.date}T${race.Sprint.time}`).toLocaleString() : '-'"></span></div>
+                        </template>
+                        <div>qualification: <span x-text="new Date(`${race.Qualifying.date}T${race.Qualifying.time}`).toLocaleString()"></span></div>
+                    </div>
+                </template>
             </div>
         </template>
     </div>
