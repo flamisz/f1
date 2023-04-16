@@ -10,6 +10,7 @@
 
 <body>
     <div
+        class="max-w-md mx-auto"
         x-data="{ races: [], race: null }"
         x-init="
             racesJson = await (await fetch('/src/json/2023.json')).json()
@@ -27,8 +28,23 @@
             </div>
         </template>
 
+        <nav class="space-y-1" aria-label="Sidebar">
+            <!-- Current: "bg-gray-100 text-gray-900", Default: "text-gray-600 hover:bg-gray-50 hover:text-gray-900" -->
+            <a href="#" class="bg-gray-100 text-gray-900 flex items-center rounded-md px-3 py-2 text-sm font-medium" aria-current="page">
+              <span class="truncate">Dashboard</span>
+            </a>
+
+            <a href="#" class="text-gray-600 hover:bg-gray-50 hover:text-gray-900 flex items-center rounded-md px-3 py-2 text-sm font-medium">
+              <span class="truncate">Team</span>
+            </a>
+          </nav>
+
         <template x-for="r in races">
-            <li class="cursor-pointer" x-text="r.raceName" @click="race = r"></li>
+            <div class="space-y-1">
+                <div class="cursor-pointer text-gray-600 hover:bg-gray-50 hover:text-gray-900 flex items-center rounded-md px-3 py-2 text-sm font-medium">
+                    <span x-text="r.raceName" @click="race = r" class="truncate"></span>
+                </div>
+            </div>
         </template>
     </div>
 </body>
