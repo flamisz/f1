@@ -1,0 +1,22 @@
+<!doctype html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="/dist/output.css" rel="stylesheet">
+    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+</head>
+
+<body>
+    <div
+        x-data="{ races: [] }"
+        x-init="races = await (await fetch('/src/json/2023.json')).json()"
+    >
+        <template x-for="race in races.MRData.RaceTable.Races">
+            <li x-text="race.raceName"></li>
+        </template>
+    </div>
+</body>
+
+</html>
