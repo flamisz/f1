@@ -13,7 +13,7 @@
         class="max-w-md mx-auto"
         x-data="{ races: [], race: null }"
         x-init="
-            racesJson = await (await fetch('/src/json/2023.json')).json()
+            racesJson = await (await fetch('src/json/2023.json')).json()
             races = racesJson.MRData.RaceTable.Races
         "
     >
