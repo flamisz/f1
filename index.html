@@ -17,12 +17,19 @@
         "
     >
         <template x-if="race">
-            <div>name: <span x-text="race.raceName"></span></div>
+            <div>
+                <div>name: <span x-text="race.raceName"></span></div>
+                <div>race time: <span x-text="new Date(`${race.date}T${race.time}`).toLocaleString()"></span></div>
+                <template x-if="race.Sprint">
+                    <div>sprint time: <span x-text="new Date(`${race.Sprint.date}T${race.Sprint.time}`).toLocaleString()"></span></div>
+                </template>
+                <div>qualification time: <span x-text="new Date(`${race.Qualifying.date}T${race.Qualifying.time}`).toLocaleString()"></span></div>
+            </div>
         </template>
+
         <template x-for="r in races">
             <li class="cursor-pointer" x-text="r.raceName" @click="race = r"></li>
         </template>
-
     </div>
 </body>
 
