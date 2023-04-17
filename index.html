@@ -11,7 +11,16 @@
 <body>
     <div
         class="max-w-md mx-auto"
-        x-data="{ races: [], race: null }"
+        x-data="{
+            races: [],
+            race: null,
+            formattedDate: function(date, time) {
+                return new Date(`${date}T${time}`).toLocaleString()
+            },
+            simpleDate: function(date) {
+                return new Date(date).toLocaleDateString()
+            },
+        }"
         x-init="
             racesJson = await (await fetch('src/json/2023.json')).json()
             races = racesJson.MRData.RaceTable.Races
@@ -25,17 +34,17 @@
                         :class="(race && r.raceName == race.raceName) ? 'bg-gray-100 text-gray-900' : 'text-gray-600 hover:bg-gray-50 hover:text-gray-900'"
                         @click="race = r"
                     >
-                        <span x-text="r.raceName" class="truncate"></span>
+                        <span x-text="r.raceName + ' - ' + simpleDate(r.date, r.time)" class="truncate"></span>
                     </div>
                 </div>
 
                 <template x-if="race && race.raceName == r.raceName">
                     <div class="px-3 py-2 space-y-1 border rounded-md mt-2 text-sm text-gray-900">
-                        <div>race: <span x-text="new Date(`${race.date}T${race.time}`).toLocaleString()"></span></div>
+                        <div>race: <span x-text="formattedDate(race.date, race.time)"></span></div>
                         <template x-if="race.Sprint">
-                            <div>sprint: <span x-text="race.Sprint ? new Date(`${race.Sprint.date}T${race.Sprint.time}`).toLocaleString() : '-'"></span></div>
+                            <div>sprint: <span x-text="race.Sprint ? formattedDate(race.Sprint.date, race.Sprint.time) : '-'"></span></div>
                         </template>
-                        <div>qualification: <span x-text="new Date(`${race.Qualifying.date}T${race.Qualifying.time}`).toLocaleString()"></span></div>
+                        <div>qualification: <span x-text="formattedDate(race.Qualifying.date, race.Qualifying.time)"></span></div>
                     </div>
                 </template>
             </div>
