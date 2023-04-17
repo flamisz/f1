@@ -55,12 +55,12 @@
         <template x-if="driverStandings">
             <div>
                 <div class="space-y-1">
-                    <div class="cursor-pointer flex items-center rounded-md px-3 py-2 font-medium" @click="driverStandings = null">
+                    <div class="cursor-pointer flex items-center px-3 py-2 font-medium" @click="driverStandings = null">
                         <span>Driver standings</span>
                     </div>
                 </div>
 
-                <div class="px-3 py-2 space-y-1 rounded-md mt-2 text-gray-900 bg-red-100">
+                <div class="px-3 py-2 space-y-1 mt-2 text-gray-900 bg-yellow-50">
                     <div class="flex justify-between">
                         <div class="font-medium">Driver</div>
                         <div class="font-medium">Points</div>
@@ -78,12 +78,12 @@
         <template x-if="constructorStandings">
             <div>
                 <div class="space-y-1">
-                    <div class="cursor-pointer flex items-center rounded-md px-3 py-2 font-medium" @click="constructorStandings = null">
+                    <div class="cursor-pointer flex items-center px-3 py-2 font-medium" @click="constructorStandings = null">
                         <span>Constructor standings</span>
                     </div>
                 </div>
 
-                <div class="px-3 py-2 space-y-1 rounded-md mt-2 text-gray-900 bg-red-100">
+                <div class="px-3 py-2 space-y-1 mt-2 text-gray-900 bg-yellow-50">
                     <div class="flex justify-between">
                         <div class="font-medium">Constructor</div>
                         <div class="font-medium">Points</div>
@@ -102,7 +102,7 @@
             <div>
                 <div class="space-y-1">
                     <div
-                        class="cursor-pointer flex items-center rounded-md px-3 py-2 font-medium"
+                        class="cursor-pointer flex items-center px-3 py-2 font-medium"
                         :class="(race && r.raceName == race.raceName) ? 'bg-yellow-100 text-gray-900' : 'text-gray-600 hover:bg-yellow-50 hover:text-gray-900'"
                         @click="(race && r.raceName == race.raceName) ? race = undefined : race = r"
                     >
@@ -113,7 +113,7 @@
                 </div>
 
                 <template x-if="race && race.raceName == r.raceName">
-                    <div class="px-3 py-2 space-y-1 rounded-md mt-2 text-gray-900 bg-red-100">
+                    <div class="px-3 py-2 space-y-1 text-gray-900 bg-yellow-50">
                         <div><span class="font-medium">race:</span> <span x-text="formattedDate(race.date, race.time)"></span></div>
                         <template x-if="race && race.Sprint">
                         <div><span class="font-medium">sprint:</span> <span x-text="race && race.Sprint ? formattedDate(race.Sprint.date, race.Sprint.time) : '-'"></span></div>
