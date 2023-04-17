@@ -6,6 +6,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link href="dist/output.css" rel="stylesheet">
     <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/dayjs@1/dayjs.min.js"></script>
+    <script>dayjs().format()</script>
 </head>
 
 <body>
@@ -15,10 +17,10 @@
             races: [],
             race: null,
             formattedDate: function(date, time) {
-                return new Date(`${date}T${time}`).toLocaleString()
+                return dayjs(`${date}T${time}`).format('YYYY-MM-DD h:mm a (ddd)')
             },
             simpleDate: function(date) {
-                return new Date(date).toLocaleDateString()
+                return dayjs(date).format('YYYY-MM-DD')
             },
         }"
         x-init="
@@ -30,21 +32,23 @@
             <div>
                 <div class="space-y-1">
                     <div
-                        class="cursor-pointer flex items-center rounded-md px-3 py-2 text-sm font-medium"
-                        :class="(race && r.raceName == race.raceName) ? 'bg-gray-100 text-gray-900' : 'text-gray-600 hover:bg-gray-50 hover:text-gray-900'"
-                        @click="race = r"
+                        class="cursor-pointer flex items-center rounded-md px-3 py-2 font-medium"
+                        :class="(race && r.raceName == race.raceName) ? 'bg-yellow-100 text-gray-900' : 'text-gray-600 hover:bg-yellow-50 hover:text-gray-900'"
+                        @click="(race && r.raceName == race.raceName) ? race = undefined : race = r"
                     >
-                        <span x-text="r.raceName + ' - ' + simpleDate(r.date, r.time)" class="truncate"></span>
+                        <span x-text="r.raceName"></span>
+                        &nbsp;|&nbsp;
+                        <span class="font-normal text-sm" x-text="simpleDate(r.date, r.time)"></span>
                     </div>
                 </div>
 
                 <template x-if="race && race.raceName == r.raceName">
-                    <div class="px-3 py-2 space-y-1 border rounded-md mt-2 text-sm text-gray-900">
-                        <div>race: <span x-text="formattedDate(race.date, race.time)"></span></div>
-                        <template x-if="race.Sprint">
-                            <div>sprint: <span x-text="race.Sprint ? formattedDate(race.Sprint.date, race.Sprint.time) : '-'"></span></div>
+                    <div class="px-3 py-2 space-y-1 rounded-md mt-2 text-gray-900 bg-red-100">
+                        <div><span class="font-medium">race:</span> <span x-text="formattedDate(race.date, race.time)"></span></div>
+                        <template x-if="race && race.Sprint">
+                            <div><span class="font-medium">sprint:</span> <span x-text="race && race.Sprint ? formattedDate(race.Sprint.date, race.Sprint.time) : '-'"></span></div>
                         </template>
-                        <div>qualification: <span x-text="formattedDate(race.Qualifying.date, race.Qualifying.time)"></span></div>
+                        <div><span class="font-medium">qualification:</span> <span x-text="formattedDate(race.Qualifying.date, race.Qualifying.time)"></span></div>
                     </div>
                 </template>
             </div>
