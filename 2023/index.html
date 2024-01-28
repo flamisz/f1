@@ -1,0 +1,129 @@
+<!doctype html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="dist/output.css" rel="stylesheet">
+    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/dayjs@1/dayjs.min.js"></script>
+    <script>dayjs().format()</script>
+</head>
+
+<body>
+    <div
+        class="max-w-md mx-auto"
+        x-data="{
+            races: [],
+            race: null,
+            driverStandings: false,
+            constructorStandings: false,
+            loading: false,
+            formattedDate(date, time) {
+                return dayjs(`${date}T${time}`).format('YYYY-MM-DD h:mm a (ddd)')
+            },
+            simpleDate(date) {
+                return dayjs(date).format('YYYY-MM-DD')
+            },
+            loadDriverStandings() {
+                this.loading = true
+                fetch('https://ergast.com/api/f1/2023/driverStandings.json')
+                    .then((response) => response.json())
+                    .then((json) => {
+                        this.driverStandings = json
+                        this.loading = false
+                    })
+            },
+            loadConstructorStandings() {
+                this.loading = true
+                fetch('https://ergast.com/api/f1/2023/constructorStandings.json')
+                    .then((response) => response.json())
+                    .then((json) => {
+                        this.constructorStandings = json
+                        this.loading = false
+                    })
+            },
+        }"
+        x-init="
+            racesJson = await (await fetch('src/json/2023.json')).json()
+            races = racesJson.MRData.RaceTable.Races
+        "
+    >
+        <button @click="loadDriverStandings">Driver standings</button>
+        <button @click="loadConstructorStandings">Constructor standings</button>
+
+        <template x-if="driverStandings">
+            <div>
+                <div class="space-y-1">
+                    <div class="cursor-pointer flex items-center px-3 py-2 font-medium" @click="driverStandings = null">
+                        <span>Driver standings</span>
+                    </div>
+                </div>
+
+                <div class="px-3 py-2 space-y-1 mt-2 text-gray-900 bg-yellow-50">
+                    <div class="flex justify-between">
+                        <div class="font-medium">Driver</div>
+                        <div class="font-medium">Points</div>
+                    </div>
+                    <template x-for="d in driverStandings.MRData.StandingsTable.StandingsLists[0].DriverStandings">
+                        <div class="flex justify-between">
+                            <div x-text="d.Driver.familyName"></div>
+                            <div x-text="d.points"></div>
+                        </div>
+                    </template>
+                </div>
+            </div>
+        </template>
+
+        <template x-if="constructorStandings">
+            <div>
+                <div class="space-y-1">
+                    <div class="cursor-pointer flex items-center px-3 py-2 font-medium" @click="constructorStandings = null">
+                        <span>Constructor standings</span>
+                    </div>
+                </div>
+
+                <div class="px-3 py-2 space-y-1 mt-2 text-gray-900 bg-yellow-50">
+                    <div class="flex justify-between">
+                        <div class="font-medium">Constructor</div>
+                        <div class="font-medium">Points</div>
+                    </div>
+                    <template x-for="c in constructorStandings.MRData.StandingsTable.StandingsLists[0].ConstructorStandings">
+                        <div class="flex justify-between">
+                            <div x-text="c.Constructor.name"></div>
+                            <div x-text="c.points"></div>
+                        </div>
+                    </template>
+                </div>
+            </div>
+        </template>
+
+        <template x-for="r in races">
+            <div>
+                <div class="space-y-1">
+                    <div
+                        class="cursor-pointer flex items-center px-3 py-2 font-medium"
+                        :class="(race && r.raceName == race.raceName) ? 'bg-yellow-100 text-gray-900' : 'text-gray-600 hover:bg-yellow-50 hover:text-gray-900'"
+                        @click="(race && r.raceName == race.raceName) ? race = undefined : race = r"
+                    >
+                        <span x-text="r.raceName"></span>
+                        &nbsp;|&nbsp;
+                        <span class="font-normal text-sm" x-text="simpleDate(r.date, r.time)"></span>
+                    </div>
+                </div>
+
+                <template x-if="race && race.raceName == r.raceName">
+                    <div class="px-3 py-2 space-y-1 text-gray-900 bg-yellow-50">
+                        <div><span class="font-medium">race:</span> <span x-text="formattedDate(race.date, race.time)"></span></div>
+                        <template x-if="race && race.Sprint">
+                        <div><span class="font-medium">sprint:</span> <span x-text="race && race.Sprint ? formattedDate(race.Sprint.date, race.Sprint.time) : '-'"></span></div>
+                        </template>
+                        <div><span class="font-medium">qualification:</span> <span x-text="formattedDate(race.Qualifying.date, race.Qualifying.time)"></span></div>
+                    </div>
+                </template>
+            </div>
+        </template>
+    </div>
+</body>
+
+</html>
