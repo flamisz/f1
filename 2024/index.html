@@ -27,7 +27,7 @@
             },
             loadDriverStandings() {
                 this.loading = true
-                fetch('https://api.jolpi.ca/ergast/f1/2025/driverStandings.json')
+                fetch('https://ergast.com/api/f1/2024/driverStandings.json')
                     .then((response) => response.json())
                     .then((json) => {
                         this.driverStandings = json
@@ -36,7 +36,7 @@
             },
             loadConstructorStandings() {
                 this.loading = true
-                fetch('https://api.jolpi.ca/ergast/f1/2025/constructorStandings.json')
+                fetch('https://ergast.com/api/f1/2024/constructorStandings.json')
                     .then((response) => response.json())
                     .then((json) => {
                         this.constructorStandings = json
@@ -45,7 +45,7 @@
             },
         }"
         x-init="
-            racesJson = await (await fetch('src/json/2025.json')).json()
+            racesJson = await (await fetch('src/json/2024.json')).json()
             races = racesJson.MRData.RaceTable.Races
         "
     >
